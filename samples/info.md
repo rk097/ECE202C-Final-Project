@@ -1,0 +1,1 @@
+Each subfolder is an extracted partial filesystem from a hypothetical IoT device running some embedded linux image with some vulnerabilities.

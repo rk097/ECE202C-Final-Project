@@ -1,0 +1,7 @@
+{
+  "device_name": "smart_camera_01",
+  "admin_username": "admin",
+  "admin_password": "admin123",
+  "debug": true,
+  "web_interface": "http://192.168.1.1/admin"
+}

@@ -1,0 +1,111 @@
+[
+  {
+    "sample": "firmware_clean",
+    "section_found": true,
+    "expected": [],
+    "found": [],
+    "true_positives": [],
+    "false_positives": [],
+    "false_negatives": [],
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "sample": "firmware_hardcoded_creds",
+    "section_found": true,
+    "expected": [
+      "Hardcoded password"
+    ],
+    "found": [
+      "Debug mode enabled",
+      "Hardcoded password",
+      "Private key exposed",
+      "Telnet enabled"
+    ],
+    "true_positives": [
+      "Hardcoded password"
+    ],
+    "false_positives": [
+      "Debug mode enabled",
+      "Private key exposed",
+      "Telnet enabled"
+    ],
+    "false_negatives": [],
+    "precision": 0.25,
+    "recall": 1.0,
+    "f1": 0.4
+  },
+  {
+    "sample": "firmware_telnet_enabled",
+    "section_found": true,
+    "expected": [
+      "Telnet enabled"
+    ],
+    "found": [
+      "Telnet enabled"
+    ],
+    "true_positives": [
+      "Telnet enabled"
+    ],
+    "false_positives": [],
+    "false_negatives": [],
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "sample": "firmware_insecure_update",
+    "section_found": true,
+    "expected": [
+      "Insecure HTTP URL",
+      "Possible unsigned update"
+    ],
+    "found": [
+      "Insecure HTTP URL",
+      "Possible unsigned update"
+    ],
+    "true_positives": [
+      "Insecure HTTP URL",
+      "Possible unsigned update"
+    ],
+    "false_positives": [],
+    "false_negatives": [],
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  {
+    "sample": "firmware_many_issues",
+    "section_found": true,
+    "expected": [
+      "Debug mode enabled",
+      "Hardcoded password",
+      "Insecure HTTP URL",
+      "Possible unsigned update",
+      "Private key exposed",
+      "Telnet enabled"
+    ],
+    "found": [
+      "Hardcoded password",
+      "Insecure HTTP URL",
+      "Possible unsigned update",
+      "Private key exposed",
+      "Telnet enabled"
+    ],
+    "true_positives": [
+      "Hardcoded password",
+      "Insecure HTTP URL",
+      "Possible unsigned update",
+      "Private key exposed",
+      "Telnet enabled"
+    ],
+    "false_positives": [],
+    "false_negatives": [
+      "Debug mode enabled"
+    ],
+    "precision": 1.0,
+    "recall": 0.8333333333333334,
+    "f1": 0.9090909090909091
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "device_name": "smart_camera_clean",
+  "admin_username": "configured_at_setup",
+  "debug": false,
+  "web_interface": "https://192.168.1.1/admin"
+}

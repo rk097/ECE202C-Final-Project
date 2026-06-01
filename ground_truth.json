@@ -1,0 +1,21 @@
+{
+  "firmware_clean": [],
+  "firmware_hardcoded_creds": [
+    "Hardcoded password"
+  ],
+  "firmware_telnet_enabled": [
+    "Telnet enabled"
+  ],
+  "firmware_insecure_update": [
+    "Insecure HTTP URL",
+    "Possible unsigned update"
+  ],
+  "firmware_many_issues": [
+    "Hardcoded password",
+    "Private key exposed",
+    "Telnet enabled",
+    "Insecure HTTP URL",
+    "Debug mode enabled",
+    "Possible unsigned update"
+  ]
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "file": "samples/firmware_many_issues/etc/config.json",
+    "finding": "Insecure HTTP URL",
+    "severity": "MEDIUM",
+    "pattern": "http://",
+    "recommendation": "Use HTTPS and verify certificates."
+  },
+  {
+    "file": "samples/firmware_many_issues/keys/private.pem",
+    "finding": "Private key exposed",
+    "severity": "HIGH",
+    "pattern": "BEGIN RSA PRIVATE KEY",
+    "recommendation": "Do not store private keys in firmware images."
+  },
+  {
+    "file": "samples/firmware_many_issues/update/update.sh",
+    "finding": "Insecure HTTP URL",
+    "severity": "MEDIUM",
+    "pattern": "http://",
+    "recommendation": "Use HTTPS and verify certificates."
+  },
+  {
+    "file": "samples/firmware_many_issues/update/update.sh",
+    "finding": "Possible unsigned update",
+    "severity": "HIGH",
+    "pattern": "wget .*firmware",
+    "recommendation": "Verify firmware updates using cryptographic signatures before installation."
+  },
+  {
+    "file": "samples/firmware_many_issues/etc/init.d/telnetd",
+    "finding": "Telnet enabled",
+    "severity": "HIGH",
+    "pattern": "\\btelnetd\\b",
+    "recommendation": "Disable Telnet and use SSH or another secure management channel."
+  },
+  {
+    "file": "samples/firmware_telnet_enabled/etc/init.d/telnetd",
+    "finding": "Telnet enabled",
+    "severity": "HIGH",
+    "pattern": "\\btelnetd\\b",
+    "recommendation": "Disable Telnet and use SSH or another secure management channel."
+  },
+  {
+    "file": "samples/firmware_insecure_update/update/update.sh",
+    "finding": "Insecure HTTP URL",
+    "severity": "MEDIUM",
+    "pattern": "http://",
+    "recommendation": "Use HTTPS and verify certificates."
+  },
+  {
+    "file": "samples/firmware_insecure_update/update/update.sh",
+    "finding": "Possible unsigned update",
+    "severity": "HIGH",
+    "pattern": "wget .*firmware",
+    "recommendation": "Verify firmware updates using cryptographic signatures before installation."
+  }
+]

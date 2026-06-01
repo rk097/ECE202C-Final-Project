@@ -1,0 +1,7 @@
+{
+  "device_name": "smart_plug_01",
+  "admin_username": "admin",
+  "admin_password": "admin123",
+  "debug": false,
+  "web_interface": "https://192.168.1.1/admin"
+}
