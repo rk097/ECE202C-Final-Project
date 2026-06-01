@@ -1,114 +1,102 @@
-# Security Analysis Report for Simulated IoT Firmware Samples
+# IoT Firmware Security Analysis Report
 
 ---
 
-## 1. firmware_clean
+## Firmware Sample: firmware_clean
 
-### Scanner Findings:
-- No issues detected by the scanner.
+### Scanner Findings
+- No issues found by the scanner.
 
-### Manual Review:
-- No configuration or other files indicate any security weaknesses or concerns.
+### Additional Observations
+- No security-relevant information or files raising concerns found in the limited available data.
+
+### False Negatives / False Positives
+- None identified.
+
+---
+
+## Firmware Sample: firmware_many_issues
+
+### Scanner Findings
+- Insecure HTTP URL found in config.json and update.sh (Medium severity).
+- Private RSA key exposed in keys/private.pem (High severity).
+- Possible unsigned firmware update in update.sh (High severity).
+- Telnet service enabled via init.d/telnetd script (High severity).
+
+### Additional Issues Noted from Files
+- config.json contains hardcoded credentials with "admin_password": "admin123", which is a weak hardcoded password.
+- update.sh uses an insecure method to download and execute firmware without signature verification, making it vulnerable to MITM (Man-In-The-Middle) attacks.
+- Telnet daemon launched with root shell access, which is highly insecure due to lack of encryption and authentication weaknesses.
+
+### False Negatives / False Positives
+- No false positives detected.
+- Scanner correctly flagged major issues with private key exposure, insecure update, and Telnet usage.
+
+---
+
+## Firmware Sample: firmware_telnet_enabled
+
+### Scanner Findings
+- Telnet enabled detected in etc/init.d/telnetd (High severity).
+
+### Additional Observations
+- init.d/telnetd script starts telnetd with root shell access, which is a critical security risk.
+
+### False Negatives / False Positives
+- No false positives detected.
+- No additional issues missed related to telnet enablement.
+
+---
+
+## Firmware Sample: firmware_insecure_update
+
+### Scanner Findings
+- Insecure HTTP URL usage in update.sh (Medium severity).
+- Possible unsigned firmware update detected (High severity).
+
+### Additional Observations
+- update.sh script downloads firmware over HTTP and executes it without signature verification, enabling potential exploit via malicious update.
+
+### False Negatives / False Positives
+- No false positives identified.
+- No other critical issues detected beyond scanner findings.
+
+---
+
+## Firmware Sample: firmware_hardcoded_creds
+
+### Scanner Findings
+- No issues flagged by the scanner.
+
+### Additional Observations
+- config.json contains hardcoded credentials with "admin_password": "admin123".
+- Use of hardcoded default credentials is a significant security risk even if the configuration uses HTTPS for web interface.
   
-### Summary:
-- This firmware appears clean with no detected or evident security issues.
-
----
-
-## 2. firmware_many_issues
-
-### Scanner Findings:
-- Insecure HTTP URL in config.json and update.sh.
-- Private key exposed in keys/private.pem.
-- Possible unsigned update in update.sh.
-- Telnet enabled in init.d/telnetd.
-
-### Manual Review and Additional Observations:
-- config.json contains hardcoded admin credentials:
-  - "admin_password": "admin123" is a weak hardcoded password.
-  - Web interface uses insecure HTTP URL (not HTTPS).
-- Private RSA key is present in the firmware at keys/private.pem — high risk of key compromise.
-- Update script (update.sh) downloads firmware over HTTP without signature verification and directly executes it, exposing to MITM and compromising updates.
-- Telnet daemon enabled, providing an unencrypted remote shell access.
-  
-### Summary:
-- The scanner highlighted critical issues accurately.
-- Additional risk from hardcoded credentials in config.json was not flagged by the scanner.
-- The firmware is highly insecure due to weak credentials, exposed private keys, insecure update mechanism, and enabled telnet.
-
----
-
-## 3. firmware_telnet_enabled
-
-### Scanner Findings:
-- Telnet enabled detected in etc/init.d/telnetd.
-
-### Manual Review:
-- init.d/telnetd script starts telnetd unencrypted shell service.
-- No other configurations or keys found that would add additional risks.
-
-### Summary:
-- Telnet enabled is a valid high-severity risk.
-- No other security issues detected.
-
----
-
-## 4. firmware_insecure_update
-
-### Scanner Findings:
-- Insecure HTTP URL in update.sh.
-- Possible unsigned update pattern in update.sh.
-
-### Manual Review:
-- update.sh downloads firmware from HTTP URL (http://updates.example.com/firmware.bin) and executes it without validation.
-- No keys or other files found to confirm any signing or verification is done.
-- Highly vulnerable update mechanism: MITM attack allows arbitrary code execution on device.
-
-### Summary:
-- The scanner correctly identified major issues with update security.
-- This poses a critical vulnerability for device integrity.
-
----
-
-## 5. firmware_hardcoded_creds
-
-### Scanner Findings:
-- No issues detected by scanner.
-
-### Manual Review:
-- config.json includes hardcoded default admin credentials:
-  - "admin_password": "admin123" — weak default password.
-- Web interface uses HTTPS, which is good.
-- Hardcoded credentials present but not flagged by scanner.
-
-### Summary:
-- The main risk is the hardcoded weak admin password.
-- Scanner missed this security issue.
-- Recommend changing default password or prompting password change on setup.
+### False Negatives / False Positives
+- Scanner false negative for hardcoded credentials; it did not flag the weak hardcoded admin password.
+- No false positives.
 
 ---
 
 # Scanner Limitations and Missed Findings
 
-- Scanner did not flag hardcoded credentials (admin_password) in config.json files, which are common and critical security flaws.
-- Scanner missed insecure default passwords that weaken device security post-deployment.
-- Scanner relies on pattern matching and may not infer the risk of hardcoded passwords or small config secrets.
-- No evidence that scanner assesses strength of passwords or flags debug flags enabled in configs.
-- Manual review of config files is necessary to identify credential management issues not captured by the scanner.
-- Scanner does not highlight config file debug flags, which could reveal information in production environments.
+1. **Hardcoded Credentials Detection**:  
+   The scanner missed flagging hardcoded credentials (e.g., "admin_password": "admin123") in `firmware_hardcoded_creds/etc/config.json`. Hardcoded secrets are a common vulnerability leading to unauthorized access.
+
+2. **Contextual Security of Config URLs**:  
+   The scanner flagged "http://" usage but did not assess whether the other security controls around these URLs (such as authentication or network isolation) mitigate risk. It is important to contextualize findings.
+
+3. **Script Content Analysis**:  
+   While the scanner detected usage of insecure HTTP and unsigned updates, a deeper analysis of the shell scripts could reveal additional execution risks such as running downloaded files without verification.
+
+4. **No Flag for Debug Enabled**:  
+   In `firmware_many_issues/etc/config.json`, debug mode is enabled (`"debug": true`), which might expose additional attack surfaces or sensitive logs but was not flagged.
+
+5. **Telnet Detection Correct but No SSH Suggestion Confirmation**:  
+   The scanner correctly flagged telnet usage but did not check if a secure alternative (like SSH) is enabled or configured.
 
 ---
 
-# Recommendations
+# Summary
 
-- Remove private keys from firmware and use secure key provisioning post-installation.
-- Disable telnet in favor of secure protocols like SSH.
-- Use HTTPS exclusively for web interfaces and update servers.
-- Sign and verify all firmware updates cryptographically before applying.
-- Eliminate hardcoded credentials; implement strong default passwords or forced password changes.
-- Review debug flags in production firmware and disable them.
-- Enhance scanner to detect credential fields and flag weak or default passwords.
-
----
-
-This concludes the security analysis of the provided simulated IoT firmware samples.
+The scanner effectively detected many critical security issues like private key exposure, insecure update mechanisms, and telnet enablement. However, it failed to identify hardcoded credentials and missed potential risks related to debug mode and execution of downloaded code without verification. Manual inspection is essential for comprehensive security evaluation of IoT firmware.
